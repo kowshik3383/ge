@@ -5,7 +5,7 @@ const db = mysql.createConnection({
   host: "zarvisgenix.mysql.database.azure.com",
   user: "hr_genix",
   password: "OWoXzci3cxU5wcH",
-  database: "genixai.info",
+  database: "genix",
 });
 
 db.connect((err) => {
