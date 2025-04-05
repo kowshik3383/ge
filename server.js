@@ -425,10 +425,10 @@ app.get('/patients/:user_id', (req, res) => {
 });
 
 // Update patient
-    const { id } = req.params;
+  
 app.put('/patients/:id', (req, res) => {
     const { first_name, last_name, details, occupation, checkup_date, address, mobile } = req.body;
-    
+      const { id } = req.params;
     const query = `UPDATE patients SET first_name=?, last_name=?, details=?, occupation=?, checkup_date=?, address=?, mobile=? WHERE id=?`;
     
     db.query(query, [first_name, last_name, details, occupation, checkup_date, address, mobile, id], (err) => {
