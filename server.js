@@ -21,7 +21,11 @@ const db = mysql.createConnection({
   user: "hr_genix",
   password: "OWoXzci3cxU5wcH",
   database: "genix",
+  ssl: {
+    rejectUnauthorized: true // or false depending on cert config
+  }
 });
+
 
 db.connect((err) => {
   if (err) {
