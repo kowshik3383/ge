@@ -95,8 +95,17 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 // Register API with Profile Picture
-app.post("/register", upload.single("profile_pic"), async (req, res) => {
-  const { first_name, last_name, gender, email, password, mobile, phone, nhs_number, address, doctor_role, department, hospital } = req.body;
+app.post("/register", (req, res, next) => {
+  // if no multipart form is sent, skip multer and call next
+  if (!req.headers['content-type']?.includes('multipart/form-data')) return next();
+  upload.single("profile_pic")(req, res, next);
+}, async (req, res) => {
+  const {
+    first_name, last_name, gender, email, password,
+    mobile, phone, nhs_number, address,
+    doctor_role, department, hospital
+  } = req.body;
+
   const profilePicPath = req.file ? `/uploads/${req.file.filename}` : null;
 
   try {
@@ -104,18 +113,23 @@ app.post("/register", upload.single("profile_pic"), async (req, res) => {
     const sql = `INSERT INTO users (first_name, last_name, gender, email, password, mobile, phone, nhs_number, address, doctor_role, department, hospital, profile_pic)
                  VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
-    db.query(sql, [first_name, last_name, gender, email, hashedPassword, mobile, phone, nhs_number, address, doctor_role, department, hospital, profilePicPath], 
-      (err, result) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ message: "Error registering user" });
-        }
-        res.status(201).json({ message: "User registered successfully", profile_pic: profilePicPath });
-      });
+    db.query(sql, [
+      first_name, last_name, gender, email, hashedPassword,
+      mobile, phone, nhs_number, address,
+      doctor_role, department, hospital, profilePicPath
+    ], (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Error registering user" });
+      }
+      res.status(201).json({ message: "User registered successfully", profile_pic: profilePicPath });
+    });
   } catch (error) {
+    console.error(error);
     res.status(500).json({ message: "Server error" });
   }
 });
+
 app.get("/get-user/:id", (req, res) => {
   const { id } = req.params;
   db.query("SELECT first_name, last_name, gender, email, mobile, phone, nhs_number, address, doctor_role, department, hospital, profile_pic FROM users WHERE id = ?", [id], 
