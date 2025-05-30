@@ -36,9 +36,8 @@ jobs:
       - name: Create deployment package
         run: |
           mkdir deploy
-          cp -r * deploy/
-          cp -r .next deploy/ || true  # If using Next.js
-          cp -r dist deploy/ || true  # If using NestJS or others
+          shopt -s extglob
+          cp -r !(deploy|release.zip|node_modules|.git|.github) deploy/
           zip -r release.zip deploy
 
       - name: Upload artifact for deployment
