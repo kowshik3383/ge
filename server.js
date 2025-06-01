@@ -15,7 +15,7 @@ app.use(express.json())
 // Serve static files for uploaded imagesget the id from local storage and perform crud of payments with the details of type amount and currency and  name date   and other nesasary details use nodejs and react and mysql
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Database Connection
+// Database Connectio
 const db = mysql.createConnection({
   host: "zarvisgenix.mysql.database.azure.com",
   user: "hr_genix",
