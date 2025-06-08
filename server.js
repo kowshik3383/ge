@@ -12,7 +12,7 @@ app.use(express.json());
 app.use(cors());
 app.use(express.json())
  app.use('/api/user',userRoutes);
-// Serve static files for upladed imagesget the id from lostorage and perform crud of payments with the details of type amount and currncy and  name date   and other nesasary details use nodejs and react and mysql
+// Serve static files for uladed imagesget the id from lostorage and perform crud of payments with the details of type amount and currncy and  name date   and other nesasary details use nodejs and react and mysql
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
 // Database Connect
